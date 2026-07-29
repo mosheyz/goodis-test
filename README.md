@@ -43,7 +43,7 @@ express, supabase, node.js, mongodb
 |-|-|-|
 POST|soldiers/:soldierId/benefits|הוספת הטבה לחייל|
 GET|soldiers/:soldierId/benefits| קבלת הטבות של חייל + היסטוריה|
-PATCH|soldiers/:soldierId/benefitS|עדכון הטבה של חייל, והוספת ההטבה הקיימת להיסטוריה|
+PATCH|soldiers/:soldierId/benefits|עדכון הטבה של חייל, והוספת ההטבה הקיימת להיסטוריה|
 POST|budget|הוספת תקציב יחידה|
 GET|budget|קבלת רשימת תקציבי היחידות + כמה כבר נוצל|
 GET|budget/:id/transactions|קבלת רשימת עסקאות של יחידה|
