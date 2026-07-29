@@ -9,9 +9,8 @@ express, supabase, node.js, mongodb
 
 ```
 ├───db
-│       benefits.js
-│       budgets.js
-│       spends.js
+│       mongodb.js => מייצר חיבור למסמך של benefits
+│       supabase.js => מייצר חיבור לדטאבייס של budgets, spends
 │       
 ├───repos
 │       benefitsRepo.js
