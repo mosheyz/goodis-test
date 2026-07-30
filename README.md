@@ -44,10 +44,10 @@ express, supabase, node.js, mongodb
 POST|soldiers/:soldierId/benefits|הוספת הטבה לחייל|works|
 GET|soldiers/:soldierId/benefits| קבלת הטבות של חייל + היסטוריה|works|
 PATCH|soldiers/:soldierId/benefits|עדכון הטבה של חייל, והוספת ההטבה הקיימת להיסטוריה|works|
-POST|budget|הוספת תקציב יחידה|
-GET|budget|קבלת רשימת תקציבי היחידות + כמה כבר נוצל|
-GET|budget/:id/transactions|קבלת רשימת עסקאות של יחידה|
-POST|budget/:id/spend|יוצר עסקת ניצול חדשה|
+POST|budget|הוספת תקציב יחידה|works|
+GET|budget|קבלת רשימת תקציבי היחידות + כמה כבר נוצל|works|
+GET|budget/:id/transactions|קבלת רשימת עסקאות של works|יחידה|
+POST|budget/:id/spend|יוצר עסקת ניצול חדשה|works|
 
 ## databases
 
@@ -62,3 +62,7 @@ spends:<br>
 מכיל forigen key של טבלת budgets.
 
 ## run structures
+
+```
+node app.js
+```

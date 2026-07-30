@@ -16,16 +16,6 @@ export const benefitsRepo = {
         return result;
     },
 
-    findById: async (id) => {
-        const result = await benefits.findOne({ _id: new ObjectId(id) });
-        if (result) {
-            result.id = result.id.toString();
-            delete result.id;
-        }
-        const thistory = result.history;
-        return result;
-    },
-
     update: async (soldierId, data) => {
         const result = await benefits.updateOne(
             { soldierId: soldierId },

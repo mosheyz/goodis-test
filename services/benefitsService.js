@@ -1,13 +1,13 @@
 import { ObjectId } from "mongodb";
 import { z } from "zod";
-
+import { de } from "zod/locales";
 
 const createBenefitSchema = z.object({
     unit: z.string().min(1),
     benefitType: z.string(),
     details: z.object(),
     decisionReason: z.string(),
-    budgetAprove: z.string(),
+    budgetAprove: z.boolean(),
 });
 
 const diningHallDetails = z.object({
@@ -16,7 +16,7 @@ const diningHallDetails = z.object({
     mealTimes: z.array(z.string()),
 });
 
-const giftCardDetails = z.string({
+const giftCardDetails = z.object({
     cardProvider: z.string(),
     monthlyValue: z.number().min(0),
     validMerchants: z.array(z.string()),
@@ -26,7 +26,7 @@ const updateBenefitSchema = z.object({
     benefitType: z.string(),
     details: z.object(),
     decisionReason: z.string(),
-    budgetAprove: z.string(),
+    budgetAprove: z.boolean(),
     decisionDate: z.string().optional(),
 });
 
@@ -42,35 +42,35 @@ export function benefitsService(repo) {
             }
 
             let { unit, benefitType, details, decisionReason, budgetAprove } =
-            benefit;
+                benefit;
 
             const validBenefit = createBenefitSchema.safeParse(benefit);
-            if (
-                !validBenefit.success ||
-                !["true", "false", "0", "1"].includes(budgetAprove)
-            ) {
+            if (!validBenefit.success) {
                 const err = new Error("Missing fields, " + validBenefit.error);
                 err.status = 400;
                 throw err;
             }
 
             if (benefitType === "diningHall") {
-                const result = diningHallDetails.safeParse(benefitType);
+                const result = diningHallDetails.safeParse(details);
                 if (!result.success) {
-                    const err = new Error("Missing diningHall fields" + result.error);
+                    const err = new Error(
+                        "Missing diningHall fields" + result.error,
+                    );
                     err.status = 400;
                     throw err;
                 }
             } else if (benefitType === "giftCard") {
-                const result1 = giftCardDetails.safeParse(benefitType);
+                const result1 = giftCardDetails.safeParse(details);
                 if (!result1.success) {
-                    const err = new Error("Missing giftCard fields" + result1.error);
+                    const err = new Error(
+                        "Missing giftCard fields" + result1.error,
+                    );
                     err.status = 400;
                     throw err;
                 }
             }
 
-            budgetAprove = Number(budgetAprove);
             const updateData = {
                 soldierId: soldierId,
                 unit,

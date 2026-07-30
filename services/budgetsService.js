@@ -1,4 +1,7 @@
 import { z } from "zod";
+import { spendsRepo } from "../repos/spendsRepo.js";
+import { spendsService } from "./spendsService.js";
+
 
 const budgetSchema = z.object({
     unit: z.string(),
@@ -17,32 +20,47 @@ export function budgetsService(repo) {
                 throw err;
             }
 
+            const { unit, benefitType, month } = budget;
+            const { data: exist, error: existError } = await repo.get({
+                unit,
+                benefitType,
+                month,
+            });
+            if (exist.length > 0 || existError) {
+                const err = new Error("Already exist");
+                err.status = 409;
+                throw err;
+            }
+
             const { data, error } = await repo.create(budget);
             if (error) throw error;
             return data[0];
         },
 
         getByFilter: async (filter) => {
-            // איך עושים פילטר משולב בסופבייס?
-            const { unit, benefitType, month } = filter;
-            const { data, error } = await repo.get();
-
+            const { data, error } = await repo.get(filter);
+            if (data.length === 0) {
+                const err = new Error("Not found");
+                err.status = 404;
+                throw err;
+            }
             if (error) throw error;
-            
+
             const updatedData = [];
             for (const item of data) {
-                if (
-                    unit === item.unit &&
-                    benefitType === item.benefitType &&
-                    month === month
-                ) {
-                    const err = new Error("Budget already exists");
-                    err.status = 409;
-                    throw err;
-                } 
+                const {data, error} = await spendsRepo.getByBudgetId(item.id);
+                console.log(data, item.id)
+                
+                item.spentAmount = data.reduce(
+                    (sum, spend) => sum + spend.amount,
+                    0,
+                );
+                console.log(item.spentAmount)
+                item.remainingAmount = item.allocatedAmount - item.spentAmount;
+                updatedData.push(item);
             }
 
-            return data;
+            return updatedData;
         },
     };
 }
