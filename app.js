@@ -13,7 +13,7 @@ server.use((req, res, next) => {
     next()
 })
 
-server.use("/soldiers/:soldierId/benefits", soldiersRouter);
+server.use("/soldiers", soldiersRouter);
 server.use("/budget", budgetsRouter);
 
 server.get("/", (req, res) => {

@@ -1,20 +1,26 @@
-import express from "express"
+import express from "express";
 import { benefitsRepo } from "../repos/benefitsRepo.js";
 import { benefitsService } from "../services/benefitsService.js";
 
-const service = benefitsService(benefitsRepo)
+const service = benefitsService(benefitsRepo);
 
-export const router = express.Router()
+export const router = express.Router();
 
-router.post("/", async (req, res) => {
-    const [result] = await service.createBenefit(req.query, req.body)
-    res.status(201).send(result)
-})
+router.post("/:soldierId/benefits", async (req, res) => {
+    const { soldierId } = req.params;
+    const result = await service.createBenefit(soldierId, req.body);
+    res.status(201).send(result);
+});
 
-router.get("/", (req, res) => {
-    
-})
+router.get("/:soldierId/benefits", async (req, res) => {
+    const { soldierId } = req.params;
+    const result = await service.getBenefitBySoldierId(soldierId);
+    res.status(200).send(result);
+});
 
-router.patch("/", (req, res) => {
-    
-})
+router.patch("/:soldierId/benefits", async (req, res) => {
+    const { soldierId } = req.params;
+    console.log(req.body)
+    const result = await service.updateBenefit(soldierId, req.body)
+    res.status(200).send(result)
+});
