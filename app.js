@@ -25,4 +25,4 @@ server.use((err, req, res, next) => {
     res.status(err.status || 500).send(err.message || "Internal server error!");
 });
 
-server.listen(PORT, () => console.log("server listening"));
+server.listen(PORT || 3000, () => console.log("server listening"));
